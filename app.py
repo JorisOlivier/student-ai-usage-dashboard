@@ -5,8 +5,7 @@ import pandas as pd
 # 1. Page Configuration
 # ---------------------------------------------------------
 st.set_page_config(
-    page_title="Home - AI Study", 
-    page_icon="🏠", 
+    page_title="Home - AI Study",
     layout="wide"
 )
 
@@ -16,7 +15,7 @@ st.set_page_config(
 @st.cache_data
 def load_data():
     # Replace "your_file.csv" with the exact name of your dataset
-    df = pd.read_excel("data/students_chatgpt_survey.xlsx")
+    df = pd.read_excel("data/students_chatgpt_survey.xlsx", engine="openpyxl")
     return df
 
 df = load_data()

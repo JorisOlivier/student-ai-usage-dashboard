@@ -28,8 +28,8 @@ st.title("The Global Impact of ChatGPT on Students")
 st.markdown("""
 Welcome to this interactive dashboard!
 
-This project is based on the **"Higher Education Students' Evolving Perceptions of ChatGPT"** dataset, a global survey conducted in 2024-2025 among higher education students[cite: 3, 4, 15]. 
-The goal of this study is to understand how generative Artificial Intelligence integrates into daily academic life, what the real use cases are, and what ethical concerns are raised by these new tools[cite: 5, 108, 122, 143].
+This project is based on the **"Higher Education Students' Evolving Perceptions of ChatGPT"** dataset, a global survey conducted in 2024-2025 among higher education students. 
+The goal of this study is to understand how generative Artificial Intelligence integrates into daily academic life, what the real use cases are, and what ethical concerns are raised by these new tools.
 
 **Use the sidebar menu to navigate between the different analytical themes.**
 """)
@@ -66,11 +66,11 @@ st.write("") # Small visual space
 # ---------------------------------------------------------
 st.markdown("### Survey Structure")
 st.markdown("""
-The questionnaire is divided into several main sections that will guide our analysis[cite: 7]:
-* **Socio-demographic Profile**: Age, gender, country, field, and level of study[cite: 21].
+The questionnaire is divided into several main sections that will guide our analysis:
+* **Socio-demographic Profile**: Age, gender, country, field, and level of study.
 * **AI Usage**: Frequency, tools used (ChatGPT, Gemini, Copilot...), and specific tasks (writing, coding, math)[cite: 69].
-* **Perceptions & Ethics**: Trust in responses, cheating risks, and university policies[cite: 108, 122].
-* **Labor Market Impact**: Fears and opportunities for future employment[cite: 143].
+* **Perceptions & Ethics**: Trust in responses, cheating risks, and university policies.
+* **Labor Market Impact**: Fears and opportunities for future employment.
 """)
 
 # An expander to avoid visually cluttering the page if the user doesn't want to see raw data

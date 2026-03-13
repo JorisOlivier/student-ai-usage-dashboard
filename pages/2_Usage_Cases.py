@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 # 1. Page Configuration
 # ---------------------------------------------------------
 st.set_page_config(page_title="Usage Cases", layout="wide")
-st.title("Theme 2: Why do Students use ChatGPT?")
+st.title("Theme 2: Why do Students use AI?")
 st.markdown("Analyze the specific tasks for which students rely on AI, from academic writing to coding assistance.")
 
 # ---------------------------------------------------------

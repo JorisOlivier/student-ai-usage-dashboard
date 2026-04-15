@@ -74,8 +74,8 @@ fig_bar = px.bar(
     y='Percentage',
     color='Q15_Label', 
     barmode='group', 
-    category_orders={"Q15_Label": frequency_order}, 
-    color_discrete_sequence=px.colors.sequential.Teal_r, 
+    category_orders={"Q15_Label": frequency_order},
+    color_discrete_sequence=px.colors.sequential.Blues, 
     title=f"Usage Frequency by {comparison_criteria}",
     labels={target_col: "", 'Percentage': 'Share of Students (%)', 'Q15_Label': 'Usage Frequency'}
 )

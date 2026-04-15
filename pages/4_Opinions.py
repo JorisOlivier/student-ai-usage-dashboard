@@ -46,8 +46,7 @@ with col1:
     if 'Q14_Label' in df.columns and not df['Q14_Label'].dropna().empty:
         version_counts = df['Q14_Label'].value_counts().reset_index()
         version_counts.columns = ['Version', 'Count']
-        fig_pie = px.pie(version_counts, names='Version', values='Count', 
-                         color_discrete_sequence=px.colors.sequential.Blues, # Changed to sequential Blues
+        fig_pie = px.pie(version_counts, names='Version', values='Count',
                          title="ChatGPT Versions Used by Students",
                          hole=0.4)
         st.plotly_chart(fig_pie, use_container_width=True)
@@ -57,10 +56,20 @@ with col2:
     if 'Q16_Label' in df.columns and not df['Q16_Label'].dropna().empty:
         exp_counts = df['Q16_Label'].value_counts().reset_index()
         exp_counts.columns = ['Experience', 'Count']
+        
+        experience_color_map = {
+            "Very bad": "#d7191c",   # Red
+            "Bad": "#fdae61",        # Orange
+            "Neutral": "#d9d9d9",    # Light Grey
+            "Good": "#a6d96a",       # Light Green
+            "Very good": "#1a9641"   # Green
+        }
+
         fig_bar = px.bar(exp_counts, x='Experience', y='Count',
                          title="Evaluation of Experience with ChatGPT",
                          color='Experience',
-                         category_orders={"Experience": ["Very bad", "Bad", "Neutral", "Good", "Very good"]})
+                         category_orders={"Experience": ["Very bad", "Bad", "Neutral", "Good", "Very good"]},
+                         color_discrete_map=experience_color_map)
         st.plotly_chart(fig_bar, use_container_width=True)
 
 st.divider()

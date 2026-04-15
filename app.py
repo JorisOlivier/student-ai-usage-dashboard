@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+from utils import load_data
 
 # ---------------------------------------------------------
 # 1. Page Configuration
@@ -11,24 +12,24 @@ st.set_page_config(
 
 # ---------------------------------------------------------
 # 2. Data Loading
-# ---------------------------------------------------------
-@st.cache_data
-def load_data():
-    # Replace "your_file.csv" with the exact name of your dataset
-    df = pd.read_excel("data/students_chatgpt_survey.xlsx", engine="openpyxl")
-    return df
-
 df = load_data()
+
+# Dynamic calculation of statistics from the cleaned dataframe
+num_students = len(df)
+num_countries = df['Q4'].nunique() # Q4 corresponds to the country of study [cite: 34]
+num_questions = len(df.columns)
 
 # ---------------------------------------------------------
 # 3. Header and Project Presentation
 # ---------------------------------------------------------
 st.title("The Global Impact of ChatGPT on Students")
 
-st.markdown("""
+st.markdown(f"""
 Welcome to this interactive dashboard!
 
-This project is based on the **"Higher Education Students' Evolving Perceptions of ChatGPT"** dataset, a global survey conducted in 2024-2025 among higher education students. 
+This project analyzes the **"Higher Education Students' Evolving Perceptions of ChatGPT"** dataset, a global survey conducted in 2024-2025. 
+The analysis is based on the responses of **{num_students:,} students** from **{num_countries} countries**.
+
 The goal of this study is to understand how generative Artificial Intelligence integrates into daily academic life, what the real use cases are, and what ethical concerns are raised by these new tools.
 
 **Use the sidebar menu to navigate between the different analytical themes.**
@@ -44,14 +45,9 @@ st.subheader("Data Overview")
 # Create 3 columns to display aligned key metrics
 col1, col2, col3 = st.columns(3)
 
-# Dynamic calculation of statistics
-num_students = len(df)
-num_countries = df['Q4'].nunique() # Q4 corresponds to the country of study [cite: 34]
-num_questions = len(df.columns)
-
 with col1:
     # st.metric is perfect for displaying a large number with a label
-    st.metric(label="Surveyed Students", value=f"{num_students:,}")
+    st.metric(label="Analyzed Students", value=f"{num_students:,}")
 
 with col2:
     st.metric(label="Countries Represented", value=num_countries)

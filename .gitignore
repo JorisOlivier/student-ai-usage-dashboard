@@ -1,0 +1,10 @@
+# Fichiers temporaires générés par les éditeurs et le système d'exploitation
+~$*
+.DS_Store
+Thumbs.db
+
+# Cache et fichiers compilés de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd

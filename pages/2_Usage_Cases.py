@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+from utils import load_data
 
 # ---------------------------------------------------------
 # 1. Page Configuration
@@ -12,31 +13,6 @@ st.markdown("Analyze the specific tasks for which students rely on AI, from acad
 
 # ---------------------------------------------------------
 # 2. Data Loading & Cleaning (Consistent with Page 1)
-# ---------------------------------------------------------
-@st.cache_data
-def load_data():
-    df = pd.read_excel("data/students_chatgpt_survey.xlsx")
-    
-    # Cleaning: Age and Country
-    df['Q3'] = pd.to_numeric(df['Q3'], errors='coerce')
-    df = df[(df['Q3'] >= 15) & (df['Q3'] <= 80)]
-    df = df.dropna(subset=['Q4'])
-    
-    # Cleaning: Gender (Keep 1 and 2)
-    df['Q2'] = pd.to_numeric(df['Q2'], errors='coerce')
-    df = df[df['Q2'].isin([1, 2])]
-    
-    # Mapping for Field of Study (Q10)
-    q10_mapping = {
-        1: "Arts and Humanities",
-        2: "Social Sciences",
-        3: "Applied Sciences",
-        4: "Natural and Life Sciences"
-    }
-    df['Q10_Label'] = df['Q10'].map(q10_mapping)
-    
-    return df
-
 df = load_data()
 
 # Task Dictionary based on Survey Q18a - Q18l

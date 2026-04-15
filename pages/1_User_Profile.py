@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+from utils import load_data
 
 # ---------------------------------------------------------
 # 1. Page Configuration
@@ -11,95 +12,49 @@ st.markdown("Discover who uses generative AI the most across the world and accor
 
 # ---------------------------------------------------------
 # 2. Data Loading
-# ---------------------------------------------------------
-@st.cache_data
-def load_data():
-    df = pd.read_excel("data/students_chatgpt_survey.xlsx")
-    
-    # ---------------------------------------------------------
-    # --- DATA CLEANING (Nettoyage des données) ---
-    # ---------------------------------------------------------
-    
-    # 1. Drop rows where the Country (Q4) is missing (NaN)
-    df = df.dropna(subset=['Q4'])
-    
-    # 2. Force conversion of Age (Q3) to numbers. Text/errors become NaN.
-    df['Q3'] = pd.to_numeric(df['Q3'], errors='coerce')
-    
-    # 3. Now we can safely keep only rows where Age is between 15 and 80
-    df = df[(df['Q3'] >= 15) & (df['Q3'] <= 80)]
-    
-    df['Q2'] = pd.to_numeric(df['Q2'], errors='coerce')
-    df = df[df['Q2'].isin([1, 2])]
-    
-    # Mapping for Q15 (Frequency of Use)
-    q15_mapping = {
-        1: "Rarely",
-        2: "Occasionally",
-        3: "Moderately",
-        4: "Considerably",
-        5: "Extensively"
-    }
-    
-    # Mapping for Q8 (Level of Study)
-    q8_mapping = {
-        1: "Undergraduate (Bachelor's)",
-        2: "Postgraduate (Master's)",
-        3: "Doctoral (PhD)"
-    }
-    
-    # Mapping for Q10 (Field of Study)
-    q10_mapping = {
-        1: "Arts and Humanities",
-        2: "Social Sciences",
-        3: "Applied Sciences",
-        4: "Natural and Life Sciences"
-    }
-    
-    # Mapping for Q2 (Gender)
-    q2_mapping = {
-        1: "Male",
-        2: "Female",
-        3: "Other",
-        4: "Prefer not to say"
-    }
-    
-    # Applying mappings to create clean label columns
-    df['Q15_Label'] = df['Q15'].map(q15_mapping)
-    df['Q8_Label'] = df['Q8'].map(q8_mapping)
-    df['Q10_Label'] = df['Q10'].map(q10_mapping)
-    df['Q2_Label'] = df['Q2'].map(q2_mapping).fillna(df['Q2'])
-    
-    return df
-
 df = load_data()
 
 
 # ---------------------------------------------------------
-# 4. VISUALIZATION 2: World Map (Choropleth)
+# 4. VISUALIZATION 2: Global Ranking of AI Usage
 # ---------------------------------------------------------
-st.subheader("2. Global Average of AI Usage")
-st.markdown("**Scale:** 1 = Rarely | 5 = Extensively")
+st.subheader("2. Global Ranking of AI Usage")
+st.markdown("This chart ranks countries by their average AI usage score (from 1 'Rarely' to 5 'Extensively'). Use the dropdown to highlight specific countries.")
 
+# Data preparation: Group by country, calculate mean usage, and sort for plotting.
 df_map = df.groupby('Q4')['Q15'].mean().reset_index(name='Average_Usage')
+df_map = df_map.sort_values('Average_Usage', ascending=True)
 
-fig_map = px.choropleth(
+# Multiselect for highlighting countries
+all_countries = df_map['Q4'].unique().tolist()
+highlighted_countries = st.multiselect(
+    "Highlight countries:",
+    options=all_countries,
+    default=[]
+)
+
+# Assign colors for highlighting. A dark color for highlighted, light grey for others.
+highlight_color = '#003f5c' 
+default_color = 'lightgrey'
+df_map['Color'] = [highlight_color if country in highlighted_countries else default_color for country in df_map['Q4']]
+
+# Create the ranked bar chart
+fig_bar_country = px.bar(
     df_map,
-    locations="Q4", 
-    locationmode="country names", 
-    color="Average_Usage",
-    hover_name="Q4",
-    range_color=[1, 5], 
-    color_continuous_scale="Viridis",
+    x='Average_Usage',
+    y='Q4',
+    orientation='h',
+    color='Color',
+    color_discrete_map='identity', # Use the colors from the 'Color' column
     title="Average AI Usage Score by Country",
-    labels={'Average_Usage': 'Avg Usage Score'}
+    labels={'Average_Usage': 'Avg Usage Score (1-5)', 'Q4': ''}
 )
 
-fig_map.update_layout(
-    geo=dict(showframe=False, showcoastlines=True, projection_type='equirectangular'),
-    margin={"r":0,"t":40,"l":0,"b":0}
+fig_bar_country.update_layout(
+    showlegend=False,
+    height=max(600, len(all_countries) * 18) # Dynamic height based on number of countries
 )
-st.plotly_chart(fig_map, use_container_width=True)
+st.plotly_chart(fig_bar_country, use_container_width=True)
 
 st.divider()
 

@@ -46,7 +46,8 @@ with col1:
     if 'Q14_Label' in df.columns and not df['Q14_Label'].dropna().empty:
         version_counts = df['Q14_Label'].value_counts().reset_index()
         version_counts.columns = ['Version', 'Count']
-        fig_pie = px.pie(version_counts, names='Version', values='Count',
+        fig_pie = px.pie(version_counts, names='Version', values='Count', 
+                         color_discrete_sequence=px.colors.sequential.Blues, # Changed to sequential Blues
                          title="ChatGPT Versions Used by Students",
                          hole=0.4)
         st.plotly_chart(fig_pie, use_container_width=True)
@@ -125,7 +126,7 @@ if job_market_labels:
     }).sort_values(by='Average Score')
 
     fig_work = px.scatter(df_work, x='Average Score', y='Statement', size='Average Score',
-                          color='Average Score', color_continuous_scale='Sunset',
+                          color='Average Score', color_continuous_scale='Blues', # Changed to sequential Blues
                           range_x=[1, 5],
                           title="Perceptions of AI's Impact on the Job Market")
 

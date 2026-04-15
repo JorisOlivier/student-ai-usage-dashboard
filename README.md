@@ -37,5 +37,5 @@ Launch the web application by typing the following command in your terminal:
 streamlit run app.py
 ```
 
-Additional Notes
+**Additional Notes**
 Data: The data used in this project originates from the "Global ChatGPT Student Survey". The original survey stated that collected data would only be disseminated in aggregate form for research purposes. Please ensure that any data shared in this repository complies with the original researchers' terms of use.

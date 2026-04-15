@@ -16,42 +16,32 @@ df = load_data()
 
 
 # ---------------------------------------------------------
-# 4. VISUALIZATION 2: Global Ranking of AI Usage
+# 4. VISUALIZATION 1: Global Ranking of AI Usage
 # ---------------------------------------------------------
-st.subheader("2. Global Ranking of AI Usage")
-st.markdown("This chart ranks countries by their average AI usage score (from 1 'Rarely' to 5 'Extensively'). Use the dropdown to highlight specific countries.")
+st.subheader("1. Global Ranking of AI Usage")
+st.markdown("This chart ranks countries by their average AI usage score (from 1 'Rarely' to 5 'Extensively'). Darker shades indicate a higher average usage.")
 
-# Data preparation: Group by country, calculate mean usage, and sort for plotting.
+# Data preparation: Group by country, calculate mean usage, drop countries with no score, and sort.
 df_map = df.groupby('Q4')['Q15'].mean().reset_index(name='Average_Usage')
+df_map = df_map.dropna(subset=['Average_Usage'])
 df_map = df_map.sort_values('Average_Usage', ascending=True)
 
-# Multiselect for highlighting countries
+# Get the list of countries for dynamic height calculation
 all_countries = df_map['Q4'].unique().tolist()
-highlighted_countries = st.multiselect(
-    "Highlight countries:",
-    options=all_countries,
-    default=[]
-)
 
-# Assign colors for highlighting. A dark color for highlighted, light grey for others.
-highlight_color = '#003f5c' 
-default_color = 'lightgrey'
-df_map['Color'] = [highlight_color if country in highlighted_countries else default_color for country in df_map['Q4']]
-
-# Create the ranked bar chart
+# Create the ranked bar chart with a grayscale color scale
 fig_bar_country = px.bar(
     df_map,
     x='Average_Usage',
     y='Q4',
     orientation='h',
-    color='Color',
-    color_discrete_map='identity', # Use the colors from the 'Color' column
+    color='Average_Usage',
+    color_continuous_scale='Greys',
     title="Average AI Usage Score by Country",
     labels={'Average_Usage': 'Avg Usage Score (1-5)', 'Q4': ''}
 )
 
 fig_bar_country.update_layout(
-    showlegend=False,
     height=max(600, len(all_countries) * 18) # Dynamic height based on number of countries
 )
 st.plotly_chart(fig_bar_country, use_container_width=True)
@@ -59,9 +49,9 @@ st.plotly_chart(fig_bar_country, use_container_width=True)
 st.divider()
 
 # ---------------------------------------------------------
-# 5. VISUALIZATION 3: Grouped Bar Chart (Academic Profile)
+# 5. VISUALIZATION 2: Grouped Bar Chart (Academic Profile)
 # ---------------------------------------------------------
-st.subheader("3. Impact of Academic Profile on Usage Frequency")
+st.subheader("2. Impact of Academic Profile on Usage Frequency")
 
 comparison_criteria = st.radio(
     "Compare students by their:",
@@ -95,9 +85,9 @@ st.plotly_chart(fig_bar, use_container_width=True)
 st.divider()
 
 # ---------------------------------------------------------
-# 6. VISUALIZATION 4: Usage by Age and Gender
+# 6. VISUALIZATION 3: Usage by Age and Gender
 # ---------------------------------------------------------
-st.subheader("4. Usage Differences by Age and Gender")
+st.subheader("3. Usage Differences by Age and Gender")
 st.markdown("How does the average usage score vary across different age groups and genders?")
 
 # 1. On crée des tranches d'âge (Age Bins) avec Pandas
